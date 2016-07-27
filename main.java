@@ -13,8 +13,8 @@ public class main {
 	static Connection connection;
 
 	static RoomUtilization RU = new RoomUtilization();
-	static DTInfo DT = new DTInfo();
 	static PatientInfo PI = new PatientInfo();
+	static DTInfo DT = new DTInfo();
 	static EmployeeInfo EI = new EmployeeInfo();
 
 	public static void main(String[] args) throws SQLException, ClassNotFoundException { 
@@ -125,7 +125,7 @@ public class main {
 			
 		} while (!choice.equals("EXIT"));
 	}
-}
+
 	
 	public static void printTable(ResultSet result) throws SQLException {
 		// access the ResultSet metadata
