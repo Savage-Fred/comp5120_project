@@ -63,7 +63,7 @@ CREATE TABLE rooms (
    roomNum  smallint,
    pid      varchar(10) UNIQUE,
    PRIMARY KEY (roomNum),
-   FOREIGN KEY (pid) REFERENCES patients (pid) -- originally inpatientInfo (pid) - Will Mc
+   FOREIGN KEY (pid) REFERENCES patients (pid)
 );
 
 
