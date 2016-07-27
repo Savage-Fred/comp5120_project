@@ -17,5 +17,12 @@ public class RoomUtilization {
 		return stmt.executeQuery(query);
 	}
 	
-	
+	ResultSet A3() throws SQLException, ClassNotFoundException {
+		String query = "SELECT tempb3.roomNum, pid, dateAdmitted" +
+					   "FROM (SELECT roomNum, patients.pid" +
+					   		  "FROM rooms LEFT JOIN patients ON (rooms.pid = patients.pid)) AS tempb3" +
+					      "JOIN admissions USING (pid);";
+		Statement stmt = main.connection.createStatement();
+		return stmt.executeQuery(query);
+	}	
 }
