@@ -13,8 +13,8 @@ public class main {
 	static Connection connection;
 
 	static RoomUtilization RU = new RoomUtilization();
-	static DTInfo DT = new DTInfo();
 	static PatientInfo PI = new PatientInfo();
+	static DTInfo DT = new DTInfo();
 	static EmployeeInfo EI = new EmployeeInfo();
 
 	public static void main(String[] args) throws SQLException, ClassNotFoundException { 
@@ -42,6 +42,7 @@ public class main {
 				printTable(RU.A3());
 			}
 
+			// Select Queries from PatientInfo
 			else if (choice.equals("B01") || choice.equals("B1")) {
 				PI.B1();
 			}
@@ -51,9 +52,80 @@ public class main {
 			else if (choice.equals("B03") || choice.equals("B3")) {
 				PI.B3();
 			}
-			else if (choice.equals("B04") || choice.equals("B4")) {	}
+			else if (choice.equals("B04") || choice.equals("B4")) {
+				PI.B4();
+			}
+			else if (choice.equals("B05") || choice.equals("B5")) {
+				PI.B5();
+			}
+			else if (choice.equals("B06") || choice.equals("B6")) {
+				PI.B6();
+			}
+			else if (choice.equals("B07") || choice.equals("B7")) {
+				PI.B7();
+			}
+			else if (choice.equals("B08") || choice.equals("B8")) {
+				PI.B8();
+			}			
+			else if (choice.equals("B09") || choice.equals("B9")) {
+				PI.B9();
+			}
+			else if (choice.equals("B10")) {
+				PI.B10();
+			}
+			
+			// Select Queries from DTInfo
+			else if (choice.equals("C01") || choice.equals("C1")) {
+				DT.C1();
+			}
+			else if (choice.equals("C02") || choice.equals("C2")) {
+				DT.C2();
+			}
+			else if (choice.equals("C03") || choice.equals("C3")) {
+				DT.C3();
+			}
+			else if (choice.equals("C04") || choice.equals("C4")) {
+				DT.C4();
+			}
+			else if (choice.equals("C05") || choice.equals("C5")) {
+				DT.C5();
+			}
+			else if (choice.equals("C06") || choice.equals("C6")) {
+				DT.C6();
+			}
+			else if (choice.equals("C07") || choice.equals("C7")) {
+				DT.C7();
+			}
+			else if (choice.equals("C08") || choice.equals("C8")) {
+				DT.C8();
+			}
+			
+			// Select Queries from EmployeeInfo
+			else if (choice.equals("D01") || choice.equals("D1")) {
+				EI.D1();
+			}
+			else if (choice.equals("D02") || choice.equals("D2")) {
+				EI.D2();
+			}
+			else if (choice.equals("D03") || choice.equals("D3")) {
+				EI.D3();
+			}
+			else if (choice.equals("D04") || choice.equals("D4")) {
+				EI.D4();
+			}
+			else if (choice.equals("D05") || choice.equals("D5")) {
+				EI.D5();
+			}
+			else if (choice.equals("D06") || choice.equals("D6")) {
+				EI.D6();
+			}
+			else if (choice.equals("D07") || choice.equals("D7")) {
+				EI.D7();
+			}
+			
 		} while (!choice.equals("EXIT"));
 	}
+
 	
 	public static void printTable(ResultSet result) throws SQLException {
 		// access the ResultSet metadata
