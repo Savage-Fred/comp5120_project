@@ -29,7 +29,7 @@ public class main {
 			System.out.print("ENTER QUERY AS X##: ");
 			choice = input.nextLine();
 			choice.toUpperCase();
-
+			
 			// Select Queries from RoomUtilization
 			if (choice.equals("A01") || choice.equals("A1")) {
 				printTable(RU.A1());
@@ -44,34 +44,34 @@ public class main {
 
 			// Select Queries from PatientInfo
 			else if (choice.equals("B01") || choice.equals("B1")) {
-				PI.B1();
+				printTable(PI.B1());
 			}
 			else if (choice.equals("B02") || choice.equals("B2")) {
-				PI.B2();
+				printTable(PI.B2());
 			}
 			else if (choice.equals("B03") || choice.equals("B3")) {
-				PI.B3();
+				printTable(PI.B3());
 			}
 			else if (choice.equals("B04") || choice.equals("B4")) {
-				PI.B4();
+				printTable(PI.B4());
 			}
 			else if (choice.equals("B05") || choice.equals("B5")) {
-				PI.B5();
+				printTable(PI.B5());
 			}
 			else if (choice.equals("B06") || choice.equals("B6")) {
-				PI.B6();
+				printTable(PI.B6());
 			}
 			else if (choice.equals("B07") || choice.equals("B7")) {
-				PI.B7();
+				printTable(PI.B7());
 			}
 			else if (choice.equals("B08") || choice.equals("B8")) {
-				PI.B8();
+				printTable(PI.B8());
 			}			
 			else if (choice.equals("B09") || choice.equals("B9")) {
-				PI.B9();
+				printTable(PI.B9());
 			}
 			else if (choice.equals("B10")) {
-				PI.B10();
+				printTable(PI.B10());
 			}
 			
 			// Select Queries from DTInfo
@@ -125,7 +125,6 @@ public class main {
 			
 		} while (!choice.equals("EXIT"));
 	}
-
 	
 	public static void printTable(ResultSet result) throws SQLException {
 		// access the ResultSet metadata
