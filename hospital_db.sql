@@ -87,40 +87,74 @@ CREATE TABLE admissions (
 );
 
 /*
-   - assignedDoctors(pid, doctor)*/
+   - assignedDoctors(pid*, doctor*)
+   - Doctors are assigned to patients. 
+   - Multiple doctors can be assigned to a single patient*/
 CREATE TABLE assignedDoctors (
-
+   pid         varchar(10),
+   doctor      varchar(10),
+   PRIMARY KEY (pid, doctor)
+   FOREIGN KEY (pid)    REFERENCES patients  (pid)
+   FOREIGN KEY (doctor) REFERENCES employees (eid)
 );
 
 /*
-   - treatments(tid, name)*/
+   - treatments(trid*, name)*/
 CREATE TABLE treatments (
-
+   trid        varchar(10),
+   tname       text,
+   PRIMARY KEY (trid)
 );
 
 /*
-   - diagnoses(did, name)*/
-
+   - diagnoses(did*, name)*/
 CREATE TABLE diagnoses (
-
+   did         varchar(10),
+   dname       text,
+   PRIMARY Key (did)
 );
 
 /*
-   - treatmentsGiven(pid, doctor, tid, eid, timestamp)*/
+   - treatmentsGiven(pid*, doctor, tid, eid, timestamp*)
+   - treatments are ordered by a doctor and administered by an appropriate employee */
 CREATE TABLE treatmentsGiven (
-
+   pid         varchar(10),
+   doctor      varchar(10),
+   trid        varchar(10),
+   eid         varchar(10),
+   tTime       timestamp,
+   FOREIGN KEY (pid)    REFERENCES patients   (pid)
+   FOREIGN KEY (doctor) REFERENCES employees  (eid)
+   FOREIGN KEY (trid)   REFERENCES treatments (trid)
+   FOREIGN KEY (eid)    REFERENCES employees  (eid)
+   PRIMARY KEY (pid, tTime)
 );
 
 /*
-   - diagnosesGiven(pid, doctor, did, timestamp)*/
+   - diagnosesGiven(pid*, doctor, did, timestamp*)*/
 CREATE TABLE diagnosesGiven (
-
+   pid         varchar(10),
+   doctor      varchar(10),
+   did         varchar(10),
+   dTime       timestamp,
+   FOREIGN KEY (pid)    REFERENCES patients  (pid)
+   FOREIGN KEY (doctor) REFERENCES employees (eid)
+   FOREIGN KEY (did)    REFERENCES diagnoses (did)
+   PRIMARY KEY (pid, dTime)
 );
 
 /*
-   - services(vid, day, location) */
+   - services(vid*, day*, location) 
+   - volunteers provide services for a few days each week 
+   - they work in different locations*/
 CREATE TABLE services (
-
+   vid       varchar(10),
+   sday      text NOT NULL
+      CHECK (sday IN ('Mon', 'Tues', 'Wed', 'Thurs', 'Fri', 'Sat', 'Sun')),
+   slocation text NOT NULL
+      CHECK (slocation IN ('gift shop', 'information desk', 'snack cart', 'reading cart')),
+   FOREIGN KEY (vid) REFERENCES volunteers (vid)
+   PRIMARY KEY (vid, sday)
 );
 
 
@@ -155,4 +189,3 @@ insert into employees values
 	(000000028, 'GILBERTO VIVIAN', '1985-6-5', FALSE, 'volunteer'),
 	(000000029, 'QUENTIN IESHA', '1981-12-7', FALSE, 'volunteer'),
 	(000000030, 'TEDDY NEREIDA', '1989-10-27', FALSE, 'volunteer');
-
