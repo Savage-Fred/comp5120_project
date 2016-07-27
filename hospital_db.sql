@@ -52,55 +52,73 @@ CREATE TABLE inpatientInfo (
    insurance         text NOT NULL,
    PRIMARY KEY (pid)
    FOREIGN KEY (pid) REFERENCES patients (pid)
-   FOREIGN KEY (primaryDoctor) REFERENCES employees (eid)
+   FOREIGN KEY (primaryDoctor) REFERENCES admissions (doctor)
 );
 
 
 /*
-   - rooms(num, currentPid)*/
-CREATE TABLE (
-
+   - rooms(num*, currentPid)
+   - num is the room number
+   - a room is assigned to at most one patient
+   - */
+CREATE TABLE rooms (
+   roomNum  smallint,
+   pid      varchar(10) UNIQUE,
+   PRIMARY KEY (roomNum)
+   FOREIGN KEY (pid) REFERENCES inpatientInfo (pid)
 );
 
 /*
-   - admissions(doctor, pid, room, dateAdmitted, dateDischarged, admin)*/
-CREATE TABLE (
-
+   - admissions(doctor, pid, room, dateAdmitted, dateDischarged, admin)
+   - a doctor with admitting priveleges admits a patient 
+   - the admitting doctor is the patient's primary doctor */
+CREATE TABLE admissions (
+   pid            varchar(10),
+   doctor         varchar(10),
+   administrator  varchar(10),
+   roomNum        smallint,
+   dateAdmitted   date,
+   dateDischarged date,
+   PRIMARY KEY (pid)
+   FOREIGN KEY (pid)       REFERENCES inpatientInfo (pid)
+   FOREIGN KEY (doctor)    REFERENCES employees (eid)
+   FOREIGN KEY (roomNum)   REFERENCES rooms (roomNum)
+   FOREIGN KEY (administrator) REFERENCES employees (eid)
 );
 
 /*
    - assignedDoctors(pid, doctor)*/
-CREATE TABLE (
+CREATE TABLE assignedDoctors (
 
 );
 
 /*
    - treatments(tid, name)*/
-CREATE TABLE (
+CREATE TABLE treatments (
 
 );
 
 /*
    - diagnoses(did, name)*/
 
-CREATE TABLE (
+CREATE TABLE diagnoses (
 
 );
 
 /*
    - treatmentsGiven(pid, doctor, tid, eid, timestamp)*/
-CREATE TABLE (
+CREATE TABLE treatmentsGiven (
 
 );
 
 /*
    - diagnosesGiven(pid, doctor, did, timestamp)*/
-CREATE TABLE (
+CREATE TABLE diagnosesGiven (
 
 );
 
 /*
    - services(vid, day, location) */
-CREATE TABLE (
+CREATE TABLE services (
 
 );
