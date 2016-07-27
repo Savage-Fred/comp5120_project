@@ -149,7 +149,8 @@ CREATE TABLE diagnosesGiven (
    - they work in different locations*/
 CREATE TABLE services (
    vid       varchar(10),
-   sday      text NOT NULL,
+   sday      text NOT NULL
+      CHECK (sday IN ('Mon', 'Tues', 'Wed', 'Thurs', 'Fri', 'Sat', 'Sun')),
    slocation text NOT NULL
       CHECK (slocation IN ('gift shop', 'information desk', 'snack cart', 'reading cart')),
    FOREIGN KEY (vid) REFERENCES volunteers (vid)
