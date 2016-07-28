@@ -49,7 +49,7 @@ public class EmployeeInfo {
 		pstmt.setString(2, doctorInfo);
 
 		return pstmt.executeQuery();
-		
+
 	}
 
 	ResultSet D5() throws SQLException {
@@ -79,10 +79,10 @@ public class EmployeeInfo {
 		String doctorInfo = new String();
 
 		String query = "SELECT tname, COUNT(treatmentsGiven.eid) as occurrences " +
-					"FROM treatments join treatmentsGiven using (trid) JOIN employees ON (treatmentsGiven.eid  =  employees.eid) " +
-					"WHERE doctor = ? OR ename = ? " +
-					"GROUP BY tname " +
-					"ORDER BY occurrences desc;";
+				"FROM treatments join treatmentsGiven using (trid) JOIN employees ON (treatmentsGiven.eid  =  employees.eid) " +
+				"WHERE doctor = ? OR ename = ? " +
+				"GROUP BY tname " +
+				"ORDER BY occurrences desc;";
 
 		//Probably want this to check the format but LMAO
 		System.out.print("Enter either Doctor's Employee ID or Name: ");

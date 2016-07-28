@@ -11,6 +11,7 @@ public class DTInfo {
       Statement stmt = main.connection.createStatement();
       return stmt.executeQuery(query);
    }
+   
    ResultSet C2() throws SQLException {
       String query = "SELECT did, dname, COUNT(did) as occurrences " +
     		  		 "FROM diagnosesGiven LEFT JOIN diagnoses USING (did) NATURAL JOIN patients  "  +
@@ -21,6 +22,7 @@ public class DTInfo {
       Statement stmt = main.connection.createStatement();
       return stmt.executeQuery(query);
    }
+   
    ResultSet C3() throws SQLException {
       String query = "SELECT did, dname, COUNT(did) as occurrences " +
     		  	"FROM diagnosesGiven NATURAL JOIN diagnoses " +
@@ -30,6 +32,7 @@ public class DTInfo {
       Statement stmt = main.connection.createStatement();
       return stmt.executeQuery(query);
    }
+   
    ResultSet C4() throws SQLException {
       String query = "SELECT trid, tname, COUNT(trid) as occurrences " +
     		  "FROM treatmentsGiven NATURAL JOIN treatments " +
@@ -39,6 +42,7 @@ public class DTInfo {
       Statement stmt = main.connection.createStatement();
       return stmt.executeQuery(query);
    }
+   
    ResultSet C5() throws SQLException {
       String query = "SELECT trid, tname, COUNT(trid) as occurrences " +
     		  		"FROM treatmentsGiven NATURAL JOIN treatments NATURAL JOIN admissions NATURAL JOIN patients " +
@@ -49,6 +53,7 @@ public class DTInfo {
       Statement stmt = main.connection.createStatement();
       return stmt.executeQuery(query);
    }
+   
    ResultSet C6() throws SQLException {
       String query = "SELECT treatments.trid, treatments.tname, COUNT(tTime) as occurrences " +
     		  "FROM treatments NATURAL JOIN treatmentsGiven JOIN patients using (pid) " +
@@ -59,11 +64,13 @@ public class DTInfo {
       Statement stmt = main.connection.createStatement();
       return stmt.executeQuery(query);
    }
+   
    ResultSet C7() throws SQLException {
       String query = "";
       Statement stmt = main.connection.createStatement();
       return stmt.executeQuery(query);
    }
+   
    ResultSet C8() throws SQLException {
       String query = "";
       Statement stmt = main.connection.createStatement();

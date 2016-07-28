@@ -164,7 +164,6 @@ public class PatientInfo {
 		System.out.print("Enter either patient name or ID: ");
 		patientInfo = input.nextLine();
 		
-		
 		PreparedStatement pstmt = main.connection.prepareStatement(query);
 		// replaces ? marks in query.
 		// In this case we're assuming it's one or the other so set both to patientInfo 
@@ -176,18 +175,24 @@ public class PatientInfo {
 
 	ResultSet B9() throws SQLException {
 		String query = "SELECT patients.pid, patients.pname, diagnoses.dname, employees.ename " +
-				"FROM patients NATURAL JOIN admissions JOIN  employees ON (admissions.doctor = employees.eid) " +
-				"JOIN diagnosesGiven ON (patients.pid = diagnosesGiven.did) JOIN diagnoses ON(diagnosesGiven.did = diagnoses.did) " +
-				"WHERE diagnoses.pid = admissions.pid AND admissions.pid = patients.pid AND patients.pid = " +
-				"(SELECT DISTINCT pid FROM admissions GROUP BY pid " +
-				"WHERE dateAdmitted > dateDischarged AND dateAdmitted - dateDischarged <= 30);";
+					"FROM patients NATURAL JOIN admissions JOIN  employees ON (admissions.doctor = employees.eid) JOIN " +
+					"diagnosesGiven ON (patients.pid = diagnosesGiven.did) " +
+					"JOIN diagnoses ON(diagnosesGiven.did = diagnoses.did) " +
+					"WHERE diagnosesGiven.pid = admissions.pid AND admissions.pid = patients.pid " +
+					"AND patients.pid = (SELECT DISTINCT pid FROM admissions WHERE dateAdmitted > dateDischarged " +
+					"AND dateAdmitted - dateDischarged <= 30 GROUP BY pid);";
 
 		Statement stmt = main.connection.createStatement();
 		return stmt.executeQuery(query);
 	}
 
 	ResultSet B10() throws SQLException {
-		String query = "";
+		String query = "SELECT pname, pid, COUNT(pid) AS \"Times Admitted\", " +
+				"ROUND(AVG(dateDischarged - dateAdmitted), 2) AS \"Average Admission Span\", " +
+				"MAX(dateDischarged - dateAdmitted) AS \"Max Admission Span\", " +
+				"MIN(dateDischarged - dateAdmitted) AS \"Min Admission Span\" " +
+				"FROM admissions NATURAL JOIN patients " +
+				"GROUP BY pname, pid; ";
 
 		Statement stmt = main.connection.createStatement();
 		return stmt.executeQuery(query);
