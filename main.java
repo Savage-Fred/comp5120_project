@@ -134,7 +134,7 @@ public class main {
 		// set the maximum column width.
 		// note that md.getColumnDisplaySize() might return not-useful values,
 		// so we'll set the width at 10.
-		int width = 10;      
+		int width = 20;      
 		String colformat = "%-" + width + "s";
 		// use a StringBuilder to create the display output
 		StringBuilder sb = new StringBuilder();
