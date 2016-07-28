@@ -39,7 +39,6 @@ public class EmployeeInfo {
 				"GROUP BY dname " +
 				"ORDER BY occurrences desc;" ;
 
-
 		//Probably want this to check the format but LMAO
 		System.out.print("Enter either Doctor's Employee ID or Name: ");
 		doctorInfo = input.nextLine();
@@ -50,6 +49,7 @@ public class EmployeeInfo {
 		pstmt.setString(2, doctorInfo);
 
 		return pstmt.executeQuery();
+		
 	}
 
 	ResultSet D5() throws SQLException {
