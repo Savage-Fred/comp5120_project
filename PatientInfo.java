@@ -7,7 +7,7 @@ import java.sql.PreparedStatement;
 
 public class PatientInfo {	
 	ResultSet B1() throws SQLException {
-		String query = "SELECT patients.pid “pid”, name, primaryDoctor, emergencyContact, insurance " +
+		String query = "SELECT patients.pid ï¿½pidï¿½, name, primaryDoctor, emergencyContact, insurance " +
 				"FROM patients LEFT JOIN inpatientInfo ON patients.pid = inpatientInfo.pid; ";
 
 		Statement stmt = main.connection.createStatement();
@@ -156,6 +156,13 @@ public class PatientInfo {
 						"GROUP BY pid " +
 						"WHERE dateAdmitted > dateDischarged AND dateAdmitted - dateDischarged <= 30);";
 
+		Statement stmt = main.connection.createStatement();
+		return stmt.executeQuery(query);
+	}
+	
+	ResultSet B10() throws SQLException {
+		String query = "";
+		
 		Statement stmt = main.connection.createStatement();
 		return stmt.executeQuery(query);
 	}
