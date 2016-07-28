@@ -5,7 +5,7 @@ import java.lang.String;
 public class main {
 
 	static String dbDriver = "org.postgresql.Driver";
-	static String dbServer = "jdbc:postgresql: //127.0.0.1:5432/";
+	static String dbServer = "jdbc:postgresql://127.0.0.1:5432/";
 	static String dbUser = "postgres";
 	static String dbPass = "comp5120";
 	static String dbName = "comp5120";
@@ -141,7 +141,7 @@ public class main {
 		// get the column labels to use for a header       
 		for (int i = 1; i <= numcols; i++) {          
 			String label = md.getColumnLabel(i);          
-			sb.append(String.format("Shit", label)); 
+			sb.append(String.format(colformat, label)); 
 		}       
 		sb.append("\n");
 		// get each row in the result       
