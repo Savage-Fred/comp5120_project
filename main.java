@@ -9,7 +9,7 @@ public class main {
 	static String dbUser = "postgres";
 	static String dbPass = "comp5120";
 	static String dbName = "comp5120";
-	
+
 	static Connection connection;
 
 	static RoomUtilization RU = new RoomUtilization();
@@ -20,16 +20,16 @@ public class main {
 	public static void main(String[] args) throws SQLException, ClassNotFoundException { 
 		Class.forName(main.dbDriver);
 		connection = DriverManager.getConnection(main.dbServer + main.dbName, main.dbUser, main.dbPass);
-		
+
 		String choice = new String();
 		Scanner input = new Scanner(System.in);
 		System.out.println("--------GROUP 6 Project-------");
 		do {
-			System.out.println("Enter \"exit\" to exit");
+			System.out.println("\n\nEnter \"exit\" to exit");
 			System.out.print("ENTER QUERY AS X##: ");
 			choice = input.nextLine();
-			choice.toUpperCase();
-			
+			choice = choice.toUpperCase();
+
 			// Select Queries from RoomUtilization
 			if (choice.equals("A01") || choice.equals("A1")) {
 				printTable(RU.A1());
@@ -73,60 +73,64 @@ public class main {
 			else if (choice.equals("B10")) {
 				printTable(PI.B10());
 			}
-			
+
 			// Select Queries from DTInfo
 			else if (choice.equals("C01") || choice.equals("C1")) {
-				DT.C1();
+				printTable(DT.C1());
 			}
 			else if (choice.equals("C02") || choice.equals("C2")) {
-				DT.C2();
+				printTable(DT.C2());
 			}
 			else if (choice.equals("C03") || choice.equals("C3")) {
-				DT.C3();
+				printTable(DT.C3());
 			}
 			else if (choice.equals("C04") || choice.equals("C4")) {
-				DT.C4();
+				printTable(DT.C4());
 			}
 			else if (choice.equals("C05") || choice.equals("C5")) {
-				DT.C5();
+				printTable(DT.C5());
 			}
 			else if (choice.equals("C06") || choice.equals("C6")) {
-				DT.C6();
+				printTable(DT.C6());
 			}
 			else if (choice.equals("C07") || choice.equals("C7")) {
-				DT.C7();
+				printTable(DT.C7());
 			}
 			else if (choice.equals("C08") || choice.equals("C8")) {
-				DT.C8();
+				printTable(DT.C8());
 			}
-			
+
 			// Select Queries from EmployeeInfo
 			else if (choice.equals("D01") || choice.equals("D1")) {
-				EI.D1();
+				printTable(EI.D1());
 			}
 			else if (choice.equals("D02") || choice.equals("D2")) {
-				EI.D2();
+				printTable(EI.D2());
 			}
 			else if (choice.equals("D03") || choice.equals("D3")) {
-				EI.D3();
+				printTable(EI.D3());
 			}
 			else if (choice.equals("D04") || choice.equals("D4")) {
-				EI.D4();
+				printTable(EI.D4());
 			}
 			else if (choice.equals("D05") || choice.equals("D5")) {
-				EI.D5();
+				printTable(EI.D5());
 			}
 			else if (choice.equals("D06") || choice.equals("D6")) {
-				EI.D6();
+				printTable(EI.D6());
 			}
 			else if (choice.equals("D07") || choice.equals("D7")) {
-				EI.D7();
+				printTable(EI.D7());
 			}
-			
+
 		} while (!choice.equals("EXIT"));
 	}
-	
-	public static void printTable(ResultSet result) throws SQLException {
+
+
+	/* 
+	 * Taken from the notes
+	 */
+	private static void printTable(ResultSet result) throws SQLException {
 		// access the ResultSet metadata
 		ResultSetMetaData md = result.getMetaData();
 		// get the number of columns in the result schema
@@ -148,8 +152,10 @@ public class main {
 		while (result.next()) {          
 			for (int i = 1; i <= numcols; i++) {             
 				String colval = result.getString(i);             
-				sb.append(String.format(colformat, colval));          }         
-			sb.append("\n");       }
+				sb.append(String.format(colformat, colval));
+			}         
+			sb.append("\n");
+		}
 		System.out.println(sb.toString());
 	}
 }
