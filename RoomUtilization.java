@@ -23,10 +23,8 @@ public class RoomUtilization {
 	}
 	
 	ResultSet A3() throws SQLException {
-		String query = "SELECT tempb3.roomNum, pid, dateAdmitted " +
-					   "FROM (SELECT roomNum, patients.pid " +
-					   		  "FROM rooms LEFT JOIN patients ON (rooms.pid = patients.pid)) AS tempb3 " +
-					      "JOIN admissions USING (pid);";
+		String query = "SELECT rooms.roomNum, patients.pname, dateAdmitted " +
+						"FROM rooms LEFT JOIN patients USING (pid) LEFT JOIN admissions USING (pid);";
 		
 		Statement stmt = main.connection.createStatement();
 		
