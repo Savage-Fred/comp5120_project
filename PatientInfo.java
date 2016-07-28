@@ -33,18 +33,24 @@ public class PatientInfo {
 				"FROM patients JOIN admissions USING (pid) " +
 				"WHERE dateAdmitted BETWEEN ? and ?; ";
 
-		//Probably want this to check the format but LMAO
-		System.out.print("Enter beginning date as YYYY-MM-DD: ");
-		date1 = Date.valueOf(input.nextLine());
-		System.out.print("Enter ending date as YYYY-MM-DD: ");
-		date2 = Date.valueOf(input.nextLine());
+		while(true) {
+			try {
+				//Probably want this to check the format but LMAO
+				System.out.print("Enter beginning date as YYYY-MM-DD: ");
+				date1 = Date.valueOf(input.nextLine());
+				System.out.print("Enter ending date as YYYY-MM-DD: ");
+				date2 = Date.valueOf(input.nextLine());
 
-		PreparedStatement pstmt = main.connection.prepareStatement(query);
-		// replaces ? marks in query
-		pstmt.setDate(1, date1);
-		pstmt.setDate(2, date2);
-
-		return pstmt.executeQuery();
+				PreparedStatement pstmt = main.connection.prepareStatement(query);
+				// replaces ? marks in query
+				pstmt.setDate(1, date1);
+				pstmt.setDate(2, date2);
+				return pstmt.executeQuery();
+			}
+			catch(IllegalArgumentException e) {
+				System.out.println("Illegal Argument make sure date format is YYYY-MM-DD.");
+			}
+		}
 	}
 
 	ResultSet B4() throws SQLException {
@@ -55,19 +61,25 @@ public class PatientInfo {
 				"FROM patients join admissions using (pid) " +
 				"WHERE dateDischarged BETWEEN ? and ? ; ";
 
+		while(true) {
+			try {
+				//Probably want this to check the format but LMAO
+				System.out.print("Enter beginning date as YYYY-MM-DD: ");
+				date1 =  Date.valueOf(input.nextLine());
+				System.out.print("Enter ending date as YYYY-MM-DD: ");
+				date2 =  Date.valueOf(input.nextLine());
 
-		//Probably want this to check the format but LMAO
-		System.out.print("Enter beginning date as YYYY-MM-DD: ");
-		date1 =  Date.valueOf(input.nextLine());
-		System.out.print("Enter ending date as YYYY-MM-DD: ");
-		date2 =  Date.valueOf(input.nextLine());
+				PreparedStatement pstmt = main.connection.prepareStatement(query);
+				// replaces ? marks in query
+				pstmt.setDate(1, date1);
+				pstmt.setDate(2, date2);
 
-		PreparedStatement pstmt = main.connection.prepareStatement(query);
-		// replaces ? marks in query
-		pstmt.setDate(1, date1);
-		pstmt.setDate(2, date2);
-
-		return pstmt.executeQuery();
+				return pstmt.executeQuery();
+			}
+			catch(IllegalArgumentException e) {
+				System.out.println("Illegal Argument make sure date format is YYYY-MM-DD.");
+			}
+		}
 	}
 
 	ResultSet B5() throws SQLException {
@@ -89,19 +101,25 @@ public class PatientInfo {
 				"AND tTime BETWEEN ? and ?; ";
 
 
+		while(true) {
+			try{
+				//Probably want this to check the format but LMAO
+				System.out.print("Enter beginning date as YYYY-MM-DD: ");
+				time1 = Timestamp.valueOf(input.nextLine() + " 00:00:00");
+				System.out.print("Enter ending date as YYYY-MM-DD: ");
+				time2 = Timestamp.valueOf(input.nextLine() + " 23:59:59");
 
-		//Probably want this to check the format but LMAO
-		System.out.print("Enter beginning date as YYYY-MM-DD: ");
-		time1 = Timestamp.valueOf(input.nextLine() + " 00:00:00");
-		System.out.print("Enter ending date as YYYY-MM-DD: ");
-		time2 = Timestamp.valueOf(input.nextLine() + " 23:59:59");
+				PreparedStatement pstmt = main.connection.prepareStatement(query);
+				// replaces ? marks in query
+				pstmt.setTimestamp(1, time1);
+				pstmt.setTimestamp(2, time2);
 
-		PreparedStatement pstmt = main.connection.prepareStatement(query);
-		// replaces ? marks in query
-		pstmt.setTimestamp(1, time1);
-		pstmt.setTimestamp(2, time2);
-
-		return pstmt.executeQuery();
+				return pstmt.executeQuery();
+			}
+			catch (IllegalArgumentException e) {
+				System.out.println("Illegal Argument make sure date format is YYYY-MM-DD.");
+			}
+		}
 	}
 
 	ResultSet B7() throws SQLException {
@@ -112,18 +130,24 @@ public class PatientInfo {
 				"FROM patients NATURAL JOIN admissions NATURAL JOIN diagnosesGiven " +
 				"NATURAL JOIN diagnoses " +
 				"WHERE pid = ? OR pname = ?; " ;
+		while(true) {
+			try {
+				//get patientInfo
+				System.out.print("Enter either patient name or ID: ");
+				patientInfo = input.nextLine().toUpperCase();
 
-		//get patientInfo
-		System.out.print("Enter either patient name or ID: ");
-		patientInfo = input.nextLine().toUpperCase();
+				PreparedStatement pstmt = main.connection.prepareStatement(query);
+				// replaces ? marks in query.
+				// In this case we're assuming it's one or the other so set both to patientInfo 
+				pstmt.setString(1, patientInfo);
+				pstmt.setString(2, patientInfo);
 
-		PreparedStatement pstmt = main.connection.prepareStatement(query);
-		// replaces ? marks in query.
-		// In this case we're assuming it's one or the other so set both to patientInfo 
-		pstmt.setString(1, patientInfo);
-		pstmt.setString(2, patientInfo);
-
-		return pstmt.executeQuery();
+				return pstmt.executeQuery();
+			}
+			catch (IllegalArgumentException e) {
+				System.out.println("Illegal Argument make sure date format is YYYY-MM-DD.");
+			}
+		}
 	}
 
 	ResultSet B8() throws SQLException {
@@ -139,7 +163,8 @@ public class PatientInfo {
 		//get patientInfo
 		System.out.print("Enter either patient name or ID: ");
 		patientInfo = input.nextLine();
-
+		
+		
 		PreparedStatement pstmt = main.connection.prepareStatement(query);
 		// replaces ? marks in query.
 		// In this case we're assuming it's one or the other so set both to patientInfo 
