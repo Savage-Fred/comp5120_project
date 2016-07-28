@@ -83,8 +83,8 @@ public class DTInfo {
 		Timestamp time;
 		String pid;
 
-		String query = "SELECT tname, tTime, eid, pname, doctor " +
-				"FROM treatmentsGiven NATURAL JOIN treatments NATURAL JOIN patients " +
+		String query = "SELECT tname, tTime, treatmentsGiven.eid, pname, ename " +
+				"FROM treatmentsGiven NATURAL JOIN treatments NATURAL JOIN patients JOIN employees ON (doctor = employees.eid)" +
 				"WHERE pid = ? AND tTime = ?;";
 
 		// try statement prevents exception related crash
