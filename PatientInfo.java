@@ -33,9 +33,9 @@ public class PatientInfo {
 				"FROM patients JOIN admissions USING (pid) " +
 				"WHERE dateAdmitted BETWEEN ? and ?; ";
 
+		// try block keeps program from crashing if wrong data is entered
 		while(true) {
 			try {
-				//Probably want this to check the format but LMAO
 				System.out.print("Enter beginning date as YYYY-MM-DD: ");
 				date1 = Date.valueOf(input.nextLine());
 				System.out.print("Enter ending date as YYYY-MM-DD: ");
@@ -48,7 +48,7 @@ public class PatientInfo {
 				return pstmt.executeQuery();
 			}
 			catch(IllegalArgumentException e) {
-				System.out.println("Illegal Argument make sure date format is YYYY-MM-DD.");
+				System.out.println("Illegal Argument make sure date format is YYYY-MM-DD.\n");
 			}
 		}
 	}
@@ -61,9 +61,9 @@ public class PatientInfo {
 				"FROM patients join admissions using (pid) " +
 				"WHERE dateDischarged BETWEEN ? and ? ; ";
 
+		// try block keeps program from crashing if wrong data is entered
 		while(true) {
 			try {
-				//Probably want this to check the format but LMAO
 				System.out.print("Enter beginning date as YYYY-MM-DD: ");
 				date1 =  Date.valueOf(input.nextLine());
 				System.out.print("Enter ending date as YYYY-MM-DD: ");
@@ -77,7 +77,7 @@ public class PatientInfo {
 				return pstmt.executeQuery();
 			}
 			catch(IllegalArgumentException e) {
-				System.out.println("Illegal Argument make sure date format is YYYY-MM-DD.");
+				System.out.println("Illegal Argument make sure date format is YYYY-MM-DD.\n");
 			}
 		}
 	}
@@ -100,10 +100,9 @@ public class PatientInfo {
 				"WHERE inpatient IS FALSE " +
 				"AND tTime BETWEEN ? and ?; ";
 
-
+		// try block keeps program from crashing if wrong data is entered
 		while(true) {
-			try{
-				//Probably want this to check the format but LMAO
+			try {
 				System.out.print("Enter beginning date as YYYY-MM-DD: ");
 				time1 = Timestamp.valueOf(input.nextLine() + " 00:00:00");
 				System.out.print("Enter ending date as YYYY-MM-DD: ");
@@ -117,7 +116,7 @@ public class PatientInfo {
 				return pstmt.executeQuery();
 			}
 			catch (IllegalArgumentException e) {
-				System.out.println("Illegal Argument make sure date format is YYYY-MM-DD.");
+				System.out.println("Illegal Argument make sure date format is YYYY-MM-DD.\n");
 			}
 		}
 	}
@@ -145,7 +144,7 @@ public class PatientInfo {
 				return pstmt.executeQuery();
 			}
 			catch (IllegalArgumentException e) {
-				System.out.println("Illegal Argument make sure date format is YYYY-MM-DD.");
+				System.out.println("Illegal Argument make sure date format is YYYY-MM-DD.\n");
 			}
 		}
 	}
@@ -163,7 +162,8 @@ public class PatientInfo {
 		//get patientInfo
 		System.out.print("Enter either patient name or ID: ");
 		patientInfo = input.nextLine();
-		
+		patientInfo = patientInfo.toUpperCase();
+
 		PreparedStatement pstmt = main.connection.prepareStatement(query);
 		// replaces ? marks in query.
 		// In this case we're assuming it's one or the other so set both to patientInfo 
@@ -175,12 +175,12 @@ public class PatientInfo {
 
 	ResultSet B9() throws SQLException {
 		String query = "SELECT patients.pid, patients.pname, diagnoses.dname, employees.ename " +
-					"FROM patients NATURAL JOIN admissions JOIN  employees ON (admissions.doctor = employees.eid) JOIN " +
-					"diagnosesGiven ON (patients.pid = diagnosesGiven.did) " +
-					"JOIN diagnoses ON(diagnosesGiven.did = diagnoses.did) " +
-					"WHERE diagnosesGiven.pid = admissions.pid AND admissions.pid = patients.pid " +
-					"AND patients.pid = (SELECT DISTINCT pid FROM admissions WHERE dateAdmitted > dateDischarged " +
-					"AND dateAdmitted - dateDischarged <= 30 GROUP BY pid);";
+				"FROM patients NATURAL JOIN admissions JOIN  employees ON (admissions.doctor = employees.eid) JOIN " +
+				"diagnosesGiven ON (patients.pid = diagnosesGiven.did) " +
+				"JOIN diagnoses ON(diagnosesGiven.did = diagnoses.did) " +
+				"WHERE diagnosesGiven.pid = admissions.pid AND admissions.pid = patients.pid " +
+				"AND patients.pid = (SELECT DISTINCT pid FROM admissions WHERE dateAdmitted > dateDischarged " +
+				"AND dateAdmitted - dateDischarged <= 30 GROUP BY pid);";
 
 		Statement stmt = main.connection.createStatement();
 		return stmt.executeQuery(query);
