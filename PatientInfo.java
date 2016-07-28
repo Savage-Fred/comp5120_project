@@ -4,10 +4,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.PreparedStatement;
+import java.sql.Date;
+import java.sql.Timestamp;
 
 public class PatientInfo {	
 	ResultSet B1() throws SQLException {
-		String query = "SELECT patients.pid �pid�, name, primaryDoctor, emergencyContact, insurance " +
+		String query = "SELECT patients.pid \"pid\", pname, primaryDoctor, emergencyContact, insurance " +
 				"FROM patients LEFT JOIN inpatientInfo ON patients.pid = inpatientInfo.pid; ";
 
 		Statement stmt = main.connection.createStatement();
@@ -16,7 +18,7 @@ public class PatientInfo {
 
 	ResultSet B2() throws SQLException {
 		String query = "SELECT pid, pname " +
-				"FROM patients" +
+				"FROM patients " +
 				"WHERE inpatient IS TRUE; ";
 
 		Statement stmt = main.connection.createStatement();
@@ -25,51 +27,51 @@ public class PatientInfo {
 
 	ResultSet B3() throws SQLException {
 		Scanner input = new Scanner(System.in);
-		String date1, date2;
+		Date date1, date2;
 
-		String query = "SELECT pid, name " +
-				"FROM patients join admissions using (pid) " +
+		String query = "SELECT pid, pname " +
+				"FROM patients JOIN admissions USING (pid) " +
 				"WHERE dateAdmitted BETWEEN ? and ?; ";
 
 		//Probably want this to check the format but LMAO
 		System.out.print("Enter beginning date as YYYY-MM-DD: ");
-		date1 = input.nextLine();
+		date1 = Date.valueOf(input.nextLine());
 		System.out.print("Enter ending date as YYYY-MM-DD: ");
-		date2 = input.nextLine();
+		date2 = Date.valueOf(input.nextLine());
 
 		PreparedStatement pstmt = main.connection.prepareStatement(query);
 		// replaces ? marks in query
-		pstmt.setString(1, date1);
-		pstmt.setString(2, date2);
+		pstmt.setDate(1, date1);
+		pstmt.setDate(2, date2);
 
 		return pstmt.executeQuery();
 	}
 
 	ResultSet B4() throws SQLException {
 		Scanner input = new Scanner(System.in);
-		String date1, date2;
+		Date date1, date2;
 
-		String query = "SELECT pid, name " +
+		String query = "SELECT pid, pname " +
 				"FROM patients join admissions using (pid) " +
 				"WHERE dateDischarged BETWEEN ? and ? ; ";
 
 
 		//Probably want this to check the format but LMAO
 		System.out.print("Enter beginning date as YYYY-MM-DD: ");
-		date1 = input.nextLine();
+		date1 =  Date.valueOf(input.nextLine());
 		System.out.print("Enter ending date as YYYY-MM-DD: ");
-		date2 = input.nextLine();
+		date2 =  Date.valueOf(input.nextLine());
 
 		PreparedStatement pstmt = main.connection.prepareStatement(query);
 		// replaces ? marks in query
-		pstmt.setString(1, date1);
-		pstmt.setString(2, date2);
+		pstmt.setDate(1, date1);
+		pstmt.setDate(2, date2);
 
 		return pstmt.executeQuery();
 	}
 
 	ResultSet B5() throws SQLException {
-		String query = "SELECT pid, name " +
+		String query = "SELECT pid, pname " +
 				"FROM patients " +
 				"WHERE inpatient IS FALSE; ";
 
@@ -79,25 +81,25 @@ public class PatientInfo {
 
 	ResultSet B6() throws SQLException {
 		Scanner input = new Scanner(System.in);
-		String date1, date2;
+		Timestamp time1, time2;
 
-		String query = "SELECT pid, name " +
-				"FROM patients  JOIN treatmentsGiven JOIN diagnosesGiven USING (pid) " +
+		String query = "SELECT pid, pname " +
+				"FROM patients NATURAL JOIN treatmentsGiven NATURAL JOIN diagnosesGiven " +
 				"WHERE inpatient IS FALSE " +
-				"AND timestamp BETWEEN ? and ?; ";
+				"AND tTime BETWEEN ? and ?; ";
 
 
 
 		//Probably want this to check the format but LMAO
 		System.out.print("Enter beginning date as YYYY-MM-DD: ");
-		date1 = input.nextLine() + " 00:00:00";
+		time1 = Timestamp.valueOf(input.nextLine() + " 00:00:00");
 		System.out.print("Enter ending date as YYYY-MM-DD: ");
-		date2 = input.nextLine() + " 23:59:59";
+		time2 = Timestamp.valueOf(input.nextLine() + " 23:59:59");
 
 		PreparedStatement pstmt = main.connection.prepareStatement(query);
 		// replaces ? marks in query
-		pstmt.setString(1, date1);
-		pstmt.setString(2, date2);
+		pstmt.setTimestamp(1, time1);
+		pstmt.setTimestamp(2, time2);
 
 		return pstmt.executeQuery();
 	}
@@ -113,7 +115,7 @@ public class PatientInfo {
 
 		//get patientInfo
 		System.out.print("Enter either patient name or ID: ");
-		patientInfo = input.nextLine();
+		patientInfo = input.nextLine().toUpperCase();
 
 		PreparedStatement pstmt = main.connection.prepareStatement(query);
 		// replaces ? marks in query.
@@ -127,12 +129,12 @@ public class PatientInfo {
 	ResultSet B8() throws SQLException {
 		Scanner input = new Scanner(System.in);
 		String patientInfo = new String();
-		
-		String query = "SELECT treatments.name, treatmentsGiven.tTime, admissions.dateAdmitted " +
-				"FROM patients NATURAL JOIN admissions NATURAL JOIN treatmentsGiven + NATURAL JOIN treatments " +
-				"WHERE pid = ? or WHERE name = ? " +
-				"GROUP BY admissions.dateAdmitted DESC " +
-				"ORDER BY treatmentsGiven.tTime ASC; ";
+
+		String query = "SELECT treatments.tname, treatmentsGiven.tTime, admissions.dateAdmitted " +
+				"FROM patients NATURAL JOIN admissions NATURAL JOIN treatmentsGiven NATURAL JOIN treatments " +
+				"WHERE pid = ? OR pname = ? " +
+				"GROUP BY treatments.tname, treatmentsGiven.tTime, admissions.dateAdmitted " +
+				"ORDER BY admissions.dateAdmitted DESC, treatmentsGiven.tTime ASC; ";
 
 		//get patientInfo
 		System.out.print("Enter either patient name or ID: ");
@@ -148,21 +150,20 @@ public class PatientInfo {
 	}
 
 	ResultSet B9() throws SQLException {
-		String query = "SELECT patients.pid, patients.name, diagnosis.name, employees.name " +
-					"FROM patients, admissions, employees, diagnosis " +
-					"WHERE diagnosis.pid = admissions.pid AND admissions.pid = patients.pid AND patients.pid = " +
-						"(SELECT DISTINCT pid " +
-						"FROM admissions " +
-						"GROUP BY pid " +
-						"WHERE dateAdmitted > dateDischarged AND dateAdmitted - dateDischarged <= 30);";
+		String query = "SELECT patients.pid, patients.pname, diagnoses.dname, employees.ename " +
+				"FROM patients NATURAL JOIN admissions JOIN  employees ON (admissions.doctor = employees.eid) " +
+				"JOIN diagnosesGiven ON (patients.pid = diagnosesGiven.did) JOIN diagnoses ON(diagnosesGiven.did = diagnoses.did) " +
+				"WHERE diagnoses.pid = admissions.pid AND admissions.pid = patients.pid AND patients.pid = " +
+				"(SELECT DISTINCT pid FROM admissions GROUP BY pid " +
+				"WHERE dateAdmitted > dateDischarged AND dateAdmitted - dateDischarged <= 30);";
 
 		Statement stmt = main.connection.createStatement();
 		return stmt.executeQuery(query);
 	}
-	
+
 	ResultSet B10() throws SQLException {
 		String query = "";
-		
+
 		Statement stmt = main.connection.createStatement();
 		return stmt.executeQuery(query);
 	}
