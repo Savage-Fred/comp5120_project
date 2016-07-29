@@ -10,8 +10,8 @@ import java.sql.Timestamp;
 public class DTInfo {
 	ResultSet C1() throws SQLException {
 		String query = "SELECT did, dname, COUNT(did) AS occurrences " +
-				"FROM diagnosesGiven LEFT JOIN diagnoses USING (did) NATURAL JOIN patients " +
-				"WHERE inpatient IS TRUE " +
+				"FROM diagnosesGiven LEFT JOIN diagnoses USING (did) NATURAL JOIN patients JOIN admissions USING (pid) " +
+				"WHERE dateDischarged IS NULL " +
 				"GROUP BY did, dname " +
 				"ORDER BY occurrences desc;";
 
@@ -21,10 +21,10 @@ public class DTInfo {
 
 	ResultSet C2() throws SQLException {
 		String query = "SELECT did, dname, COUNT(did) as occurrences " +
-				"FROM diagnosesGiven LEFT JOIN diagnoses USING (did) NATURAL JOIN patients  "  +
-				"WHERE inpatient is false " +
-				"GROUP BY did, dname " +
-				"ORDER BY occurrences desc;"; 
+						"FROM diagnoses NATURAL JOIN diagnosesGiven JOIN patients using (pid) " +
+						"WHERE inpatient is false " +
+						"GROUP BY did " +
+						"ORDER BY occurrences desc;"; 
 
 		Statement stmt = main.connection.createStatement();
 		return stmt.executeQuery(query);
@@ -73,7 +73,19 @@ public class DTInfo {
 	}
 
 	ResultSet C7() throws SQLException {
-		String query = "";
+		String query = "SELECT dname,patients.pname,COUNT(admissions.pid) AS TotalAdmissions " +
+						"FROM patients NATURAL JOIN admissions LEFT JOIN diagnosesGiven ON admissions.pid=diagnosesGiven.pid NATURAL JOIN diagnoses " +
+						"WHERE patients.pname = (SELECT pname " +
+                		"FROM (SELECT pname, COUNT(admissions.pid) AS aCount " +
+                      				"FROM patients NATURAL JOIN admissions " +
+                      				"GROUP BY pname) AS admitCount " +
+                		    "WHERE aCount = (SELECT MAX(aCount) " +
+                                			"FROM (SELECT COUNT(pid) AS aCount " +
+                                            "FROM admissions " +
+                                            "GROUP BY pid) AS maxCount)) " +
+						"GROUP BY patients.pname, diagnoses.dname " +
+						"ORDER BY COUNT(admissions.pid) ASC ";
+
 		Statement stmt = main.connection.createStatement();
 		return stmt.executeQuery(query);
 	}
@@ -83,7 +95,7 @@ public class DTInfo {
 		Timestamp time;
 		String pid;
 
-		String query = "SELECT tname, tTime, treatmentsGiven.eid, pname, ename " +
+		String query = "SELECT tname, tTime, treatmentsGiven.eid, pname, ename as doctor " +
 				"FROM treatmentsGiven NATURAL JOIN treatments NATURAL JOIN patients JOIN employees ON (doctor = employees.eid)" +
 				"WHERE pid = ? AND tTime = ?;";
 
