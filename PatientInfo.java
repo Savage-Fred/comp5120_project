@@ -18,8 +18,8 @@ public class PatientInfo {
 
 	ResultSet B2() throws SQLException {
 		String query = "SELECT pid, pname " +
-				"FROM patients " +
-				"WHERE inpatient IS TRUE; ";
+				"FROM patients NATURAL JOIN admissions " +
+				"WHERE dateDischarged IS NULL; ";
 
 		Statement stmt = main.connection.createStatement();
 		return stmt.executeQuery(query);
@@ -126,7 +126,7 @@ public class PatientInfo {
 		String patientInfo;
 
 		String query = "SELECT pid, pname, dname " +
-				"FROM patients NATURAL JOIN admissions NATURAL JOIN diagnosesGiven " +
+				"FROM patients NATURAL JOIN admissions JOIN diagnosesGiven USING (pid)" +
 				"NATURAL JOIN diagnoses " +
 				"WHERE pid = ? OR pname = ?; " ;
 		while(true) {
@@ -154,7 +154,7 @@ public class PatientInfo {
 		String patientInfo = new String();
 
 		String query = "SELECT treatments.tname, treatmentsGiven.tTime, admissions.dateAdmitted " +
-				"FROM patients NATURAL JOIN admissions NATURAL JOIN treatmentsGiven NATURAL JOIN treatments " +
+				"FROM patients NATURAL JOIN admissions JOIN treatmentsGiven USING (pid) NATURAL JOIN treatments " +
 				"WHERE pid = ? OR pname = ? " +
 				"GROUP BY treatments.tname, treatmentsGiven.tTime, admissions.dateAdmitted " +
 				"ORDER BY admissions.dateAdmitted DESC, treatmentsGiven.tTime ASC; ";
@@ -178,8 +178,7 @@ public class PatientInfo {
 				"FROM patients NATURAL JOIN admissions JOIN  employees ON (admissions.doctor = employees.eid) JOIN " +
 				"diagnosesGiven ON (patients.pid = diagnosesGiven.did) " +
 				"JOIN diagnoses ON(diagnosesGiven.did = diagnoses.did) " +
-				"WHERE diagnosesGiven.pid = admissions.pid AND admissions.pid = patients.pid " +
-				"AND patients.pid = (SELECT DISTINCT pid FROM admissions WHERE dateAdmitted > dateDischarged " +
+				"WHERE patients.pid = (SELECT DISTINCT pid FROM admissions WHERE dateAdmitted > dateDischarged " +
 				"AND dateAdmitted - dateDischarged <= 30 GROUP BY pid);";
 
 		Statement stmt = main.connection.createStatement();
